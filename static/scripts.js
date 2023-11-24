@@ -77,7 +77,16 @@ function fetchStockList() {
   });
 }
 
+function test() {
+  fetch('http://localhost:3000/stocks')
+  .then ((res) => (res.json())
+  .then((data) => {
+    console.log(data)
+  }))
+}
+
 // Call the function when the page loads
 document.addEventListener('DOMContentLoaded', (event) => {
-  fetchStockList();
+  //fetchStockList();
+  test();
 });

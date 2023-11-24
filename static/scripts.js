@@ -35,7 +35,7 @@ async function fetchStockData(stock) {
       return await response.json();
   } catch (error) {
       console.error('Error fetching data for stock:', stock, error);
-      return null; // Handle error as appropriate
+      return null; // Handles error as appropriate
   }
 }
 
@@ -72,12 +72,12 @@ function fetchStockList() {
       // Log the structured stock data
       console.log('Complete Stock Data:', stockData);
       plotLineChart(stockData);
-      // Additional processing of stock data can be done here
-      // For example, updating the chart with this data
+      
+      
   })
   .catch(error => {
       console.error('There has been a problem with your fetch operation:', error);
-      // Handle or display error as appropriate
+      // display appropriate error message
   });
 }
 

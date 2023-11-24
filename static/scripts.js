@@ -54,14 +54,18 @@ async function fetchAllStockData(stocks) {
 // Main function to fetch stock list and their data
 function fetchStockList() {
   fetch('http://localhost:3000/stocks')
-  .then(response => {
-      if (!response.ok) {
-          throw new Error('Network response was not ok');
-      }
-      return response.json();
+  .then((res) => {
+    if (!res.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return res.json()
+  })
+  .then((data) => {
+      console.log(data);
+      return data;
   })
   .then(async stocks => {
-      const stockData = await fetchAllStockData(stocks);
+      const stockData = await fetchAllStockData(stocks.stockSymbols);
       // Hide the spinner after all data is loaded
       document.querySelector('.spinner').style.display = 'none';
       
@@ -89,6 +93,6 @@ function test() {
 
 // Call the function when the page loads
 document.addEventListener('DOMContentLoaded', (event) => {
-  //fetchStockList();
-  test();
+  fetchStockList();
+  //test();
 });

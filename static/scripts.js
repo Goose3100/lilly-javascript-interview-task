@@ -71,7 +71,7 @@ function fetchStockList() {
       
       // Log the structured stock data
       console.log('Complete Stock Data:', stockData);
-
+      plotLineChart(stockData);
       // Additional processing of stock data can be done here
       // For example, updating the chart with this data
   })
@@ -89,6 +89,38 @@ function test() {
   }))
 }
 
+function plotLineChart(stockData) {
+  // Clear the canvas for redrawing
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Redraw axes
+  drawLine([50, 50], [50, 550], 'black');
+  drawTriangle([35, 50], [65, 50], [50, 35]);
+  drawLine([50, 550], [950, 550], 'black');
+  drawTriangle([950, 535], [950, 565], [965, 550]);
+
+  // Find min and max for scaling
+  let minTimestamp = Math.min(...stockData.flatMap(s => s.data.map(point => point.timestamp)));
+  let maxTimestamp = Math.max(...stockData.flatMap(s => s.data.map(point => point.timestamp)));
+  let maxValue = Math.max(...stockData.flatMap(s => s.data.map(point => point.value)));
+
+  // Scaling functions
+  const scaleX = (timestamp) => ((timestamp - minTimestamp) / (maxTimestamp - minTimestamp)) * (canvas.width - 100) + 50;
+  const scaleY = (value) => (1 - value / maxValue) * (canvas.height - 100) + 50;
+
+  // Draw each stock series
+  stockData.forEach(series => {
+      series.data.forEach((point, index) => {
+          if (index > 0) {
+              const x1 = scaleX(series.data[index - 1].timestamp);
+              const y1 = scaleY(series.data[index - 1].value);
+              const x2 = scaleX(point.timestamp);
+              const y2 = scaleY(point.value);
+              drawLine([x1, y1], [x2, y2], series.color || 'blue');
+          }
+      });
+  });
+}
 
 
 // Call the function when the page loads

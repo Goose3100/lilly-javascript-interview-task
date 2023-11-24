@@ -5,7 +5,7 @@
 
 .spinner{ /*defines the spinner*/
   font-size: 140px;
-  animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite; /*makes the spinner spin*/
   display: inline-block;
   padding-bottom: 12px;
 }

@@ -25,30 +25,8 @@ drawTriangle([950, 535], [950, 565], [965, 550])
 
 
 
-function fetchStockList() { //Query the backend for list of available stocks.
-  fetch('http://localhost:3000/stocks')
-  .then(response => {
-      if (!response.ok) {
-          throw new Error('Network response was not ok ' + response.statusText);
-      }
-      return response.json();
-  })
-  .then(async stocks => {
-    const stockData = await fetchAllStockData(stocks);
-    // Hide the spinner
-    document.querySelector('.spinner').style.display = 'none';
-    return stockData;
-})
-  .then(data => {
-      console.log('Stocks:', data);
-      // Process the stock data here
-  })
-  .catch(error => {
-      console.error('There has been a problem with your fetch operation:', error);
-  });
-}
-
-async function fetchStockData(stock) { //Query the backend for data about each stock.
+// Function to fetch data for a single stock
+async function fetchStockData(stock) {
   try {
       const response = await fetch(`http://localhost:3000/stocks/${stock}`);
       if (!response.ok) {
@@ -57,10 +35,11 @@ async function fetchStockData(stock) { //Query the backend for data about each s
       return await response.json();
   } catch (error) {
       console.error('Error fetching data for stock:', stock, error);
-      return null; // add appropriate error handling when available
+      return null; // Handle error as appropriate
   }
 }
 
+// Function to fetch data for all stocks
 async function fetchAllStockData(stocks) {
   const allData = [];
   for (const stock of stocks) {
@@ -72,7 +51,33 @@ async function fetchAllStockData(stocks) {
   return allData;
 }
 
+// Main function to fetch stock list and their data
+function fetchStockList() {
+  fetch('http://localhost:3000/stocks')
+  .then(response => {
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      return response.json();
+  })
+  .then(async stocks => {
+      const stockData = await fetchAllStockData(stocks);
+      // Hide the spinner after all data is loaded
+      document.querySelector('.spinner').style.display = 'none';
+      
+      // Log the structured stock data
+      console.log('Complete Stock Data:', stockData);
 
+      // Additional processing of stock data can be done here
+      // For example, updating the chart with this data
+  })
+  .catch(error => {
+      console.error('There has been a problem with your fetch operation:', error);
+      // Handle or display error as appropriate
+  });
+}
+
+// Call the function when the page loads
 document.addEventListener('DOMContentLoaded', (event) => {
-  fetchStockList(); // Fetch the stock list when the program is loaded
+  fetchStockList();
 });
